@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Asset } from 'expo-asset';
 import { AppLoading } from 'expo';
 
+import { StatusBar } from 'react-native';
 import LoginScreen from './src';
 
 const App: React.FC = () => {
@@ -26,7 +27,16 @@ const App: React.FC = () => {
     );
   }
 
-  return <LoginScreen />;
+  return (
+    <>
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor="transparent"
+        translucent
+      />
+      <LoginScreen />
+    </>
+  );
 };
 
 export default App;

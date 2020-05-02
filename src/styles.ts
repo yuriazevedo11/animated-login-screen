@@ -1,6 +1,6 @@
 import { Dimensions } from 'react-native';
-import { RectButton } from 'react-native-gesture-handler';
 import styled from 'styled-components/native';
+import Animated from 'react-native-reanimated';
 
 const { height } = Dimensions.get('window');
 
@@ -10,7 +10,7 @@ export const Container = styled.View`
   justify-content: flex-end;
 `;
 
-export const ImageContainer = styled.View`
+export const ImageContainer = styled(Animated.View)`
   position: absolute;
   top: 0;
   right: 0;
@@ -34,7 +34,7 @@ interface ButtonProps {
   color?: string;
 }
 
-export const SignInButton = styled(RectButton)<ButtonProps>`
+export const SignInButton = styled(Animated.View)<ButtonProps>`
   background: ${({ color }) => color || '#fff'};
   height: 70px;
   margin: 5px 20px;

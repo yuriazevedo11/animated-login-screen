@@ -24,6 +24,7 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'import/extensions': 'off',
     'global-require': 'off',
+    'react/jsx-props-no-spreading': 'off',
   },
   overrides: [
     {

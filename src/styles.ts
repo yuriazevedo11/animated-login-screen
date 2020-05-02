@@ -2,7 +2,7 @@ import { Dimensions, StyleSheet } from 'react-native';
 import styled from 'styled-components/native';
 import Animated from 'react-native-reanimated';
 
-const { height } = Dimensions.get('window');
+const { height, width } = Dimensions.get('window');
 
 export const Container = styled.View`
   flex: 1;
@@ -44,14 +44,14 @@ export const SignInButton = styled(Animated.View).attrs({
   },
 })<ButtonProps>`
   background: ${({ color }) => color || '#fff'};
-  height: 70px;
+  height: 62px;
   margin: 5px 20px;
-  border-radius: 35px;
+  border-radius: 31px;
   align-items: center;
   justify-content: center;
 `;
 
-export const ButtonText = styled.Text<ButtonProps>`
+export const ButtonText = styled(Animated.Text)<ButtonProps>`
   font-size: 20px;
   font-weight: bold;
   color: ${({ color }) => color || '#333'};
@@ -73,4 +73,26 @@ export const TextField = styled.TextInput`
   margin: 5px 20px;
   padding: 0 15px;
   border-color: rgba(0, 0, 0, 0.2);
+`;
+
+const BUTTON_SIZE = 36;
+
+export const CloseButton = styled(Animated.View).attrs({
+  elevation: 2,
+  shadowOpacity: 0.2,
+  shadowColor: '#333',
+  shadowOffset: {
+    width: 2,
+    height: 2,
+  },
+})<ButtonProps>`
+  height: ${BUTTON_SIZE}px;
+  width: ${BUTTON_SIZE}px;
+  background: #fff;
+  border-radius: 18px;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: ${-BUTTON_SIZE / 2}px;
+  left: ${width / 2 - BUTTON_SIZE / 2}px;
 `;

@@ -7,6 +7,7 @@ import Animated, {
   set,
   interpolate,
   Extrapolate,
+  concat,
 } from 'react-native-reanimated';
 import { State, TapGestureHandler } from 'react-native-gesture-handler';
 import { onGestureEvent, withTimingTransition } from 'react-native-redash';
@@ -20,6 +21,7 @@ import {
   ButtonText,
   Form,
   TextField,
+  CloseButton,
 } from './styles';
 
 const { Value } = Animated;
@@ -28,10 +30,12 @@ const { height } = Dimensions.get('window');
 const Login: React.FC = () => {
   const baseValue = new Value(1);
   const gestureEvent = new Value(State.UNDETERMINED);
+  const closeGestureEvent = new Value(State.UNDETERMINED);
+  const buttonOpacity = withTimingTransition(baseValue);
   const passwordRef = useRef<TextInput>(null);
 
-  const buttonOpacity = withTimingTransition(baseValue);
-  const gestureHanlder = onGestureEvent({ state: gestureEvent });
+  const gestureHandler = onGestureEvent({ state: gestureEvent });
+  const closeGestureHandler = onGestureEvent({ state: closeGestureEvent });
 
   const buttonTranslateY = interpolate(buttonOpacity, {
     inputRange: [0, 1],
@@ -63,7 +67,14 @@ const Login: React.FC = () => {
     extrapolate: Extrapolate.CLAMP,
   });
 
+  const rotateCross = interpolate(buttonOpacity, {
+    inputRange: [0, 1],
+    outputRange: [180, 360],
+    extrapolate: Extrapolate.CLAMP,
+  });
+
   useCode(() => cond(eq(gestureEvent, State.END), set(baseValue, 0)), []);
+  useCode(() => cond(eq(closeGestureEvent, State.END), set(baseValue, 1)), []);
 
   return (
     <Container>
@@ -76,7 +87,7 @@ const Login: React.FC = () => {
       </ImageContainer>
 
       <ButtonArea>
-        <TapGestureHandler {...gestureHanlder}>
+        <TapGestureHandler {...gestureHandler}>
           <SignInButton
             style={{
               opacity: buttonOpacity,
@@ -105,6 +116,19 @@ const Login: React.FC = () => {
           transform: [{ translateY: formY }],
         }}
       >
+        <TapGestureHandler {...closeGestureHandler}>
+          <CloseButton>
+            <ButtonText
+              style={{
+                fontSize: 16,
+                transform: [{ rotate: concat(rotateCross, 'deg') }],
+              }}
+            >
+              X
+            </ButtonText>
+          </CloseButton>
+        </TapGestureHandler>
+
         <TextField
           keyboardType="email-address"
           placeholder="E-MAIL"

@@ -1,19 +1,32 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { Asset } from 'expo-asset';
+import { AppLoading } from 'expo';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+import LoginScreen from './src';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-    </View>
-  );
-}
+const App: React.FC = () => {
+  const [ready, setReady] = useState(false);
+
+  const cacheResourcesAsync = async () => {
+    const images = [require('./assets/login-background.jpg')];
+
+    const cacheImages = images.map((image) =>
+      Asset.fromModule(image).downloadAsync()
+    );
+
+    await Promise.all(cacheImages);
+  };
+
+  if (!ready) {
+    return (
+      <AppLoading
+        startAsync={cacheResourcesAsync}
+        onFinish={() => setReady(true)}
+      />
+    );
+  }
+
+  return <LoginScreen />;
+};
+
+export default App;

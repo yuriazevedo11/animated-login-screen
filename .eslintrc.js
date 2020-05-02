@@ -2,7 +2,7 @@ module.exports = {
   env: {
     es6: true,
   },
-  extends: ['plugin:react/recommended', 'airbnb'],
+  extends: ['airbnb', 'prettier', 'prettier/react'],
   globals: {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly',
@@ -23,6 +23,7 @@ module.exports = {
     ],
     'import/prefer-default-export': 'off',
     'import/extensions': 'off',
+    'global-require': 'off',
   },
   overrides: [
     {

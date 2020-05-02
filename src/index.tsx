@@ -1,16 +1,19 @@
 import React, { useRef } from 'react';
-import { Dimensions, TextInput } from 'react-native';
+import { Dimensions, TextInput, Keyboard } from 'react-native';
 import Animated, {
   useCode,
   cond,
   eq,
   set,
+  and,
   interpolate,
   Extrapolate,
   concat,
+  call,
 } from 'react-native-reanimated';
 import { State, TapGestureHandler } from 'react-native-gesture-handler';
 import { onGestureEvent, withTimingTransition } from 'react-native-redash';
+import Svg, { ClipPath, Circle } from 'react-native-svg';
 
 import {
   Container,
@@ -25,7 +28,8 @@ import {
 } from './styles';
 
 const { Value } = Animated;
-const { height } = Dimensions.get('window');
+const { height, width } = Dimensions.get('window');
+const INCREASED_HEIGHT = 30;
 
 const Login: React.FC = () => {
   const baseValue = new Value(1);
@@ -45,7 +49,7 @@ const Login: React.FC = () => {
 
   const bgTranslateY = interpolate(buttonOpacity, {
     inputRange: [0, 1],
-    outputRange: [-height / 3, 0],
+    outputRange: [-height / 3 - INCREASED_HEIGHT, 0],
     extrapolate: Extrapolate.CLAMP,
   });
 
@@ -74,7 +78,17 @@ const Login: React.FC = () => {
   });
 
   useCode(() => cond(eq(gestureEvent, State.END), set(baseValue, 0)), []);
-  useCode(() => cond(eq(closeGestureEvent, State.END), set(baseValue, 1)), []);
+  useCode(
+    () =>
+      cond(
+        eq(closeGestureEvent, State.END),
+        and(
+          set(baseValue, 1),
+          call([], () => Keyboard.dismiss())
+        )
+      ),
+    []
+  );
 
   return (
     <Container>
@@ -83,7 +97,16 @@ const Login: React.FC = () => {
           transform: [{ translateY: bgTranslateY }],
         }}
       >
-        <LoginImage />
+        <Svg height={height + INCREASED_HEIGHT} width={width}>
+          <ClipPath id="clip">
+            <Circle r={height + INCREASED_HEIGHT} cx={width / 2} />
+          </ClipPath>
+
+          <LoginImage
+            increasedHeight={INCREASED_HEIGHT}
+            clipPath="url(#clip)"
+          />
+        </Svg>
       </ImageContainer>
 
       <ButtonArea>

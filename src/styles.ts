@@ -1,6 +1,7 @@
 import { Dimensions, StyleSheet } from 'react-native';
 import styled from 'styled-components/native';
 import Animated from 'react-native-reanimated';
+import { Image } from 'react-native-svg';
 
 const { height, width } = Dimensions.get('window');
 
@@ -18,13 +19,18 @@ export const ImageContainer = styled(Animated.View)`
   left: 0;
 `;
 
-export const LoginImage = styled.Image.attrs({
-  source: require('../assets/login-background.jpg'),
-})`
-  flex: 1;
-  height: null;
-  width: null;
-`;
+interface LoginImageProps {
+  increasedHeight: number;
+}
+
+export const LoginImage = styled(Image).attrs(
+  ({ increasedHeight }: LoginImageProps) => ({
+    href: require('../assets/login-background.jpg'),
+    preserveAspectRatio: 'xMidyMid slice',
+    height: height + increasedHeight,
+    width,
+  })
+)<LoginImageProps>``;
 
 export const ButtonArea = styled.View`
   height: ${height / 3}px;
@@ -64,6 +70,7 @@ export const Form = styled(Animated.View)`
   bottom: 0;
   left: 0;
   justify-content: center;
+  background: #fff;
 `;
 
 export const TextField = styled.TextInput`

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Dimensions } from 'react-native';
+import React, { useRef } from 'react';
+import { Dimensions, TextInput } from 'react-native';
 import Animated, {
   useCode,
   cond,
@@ -18,6 +18,8 @@ import {
   ButtonArea,
   SignInButton,
   ButtonText,
+  Form,
+  TextField,
 } from './styles';
 
 const { Value } = Animated;
@@ -26,6 +28,7 @@ const { height } = Dimensions.get('window');
 const Login: React.FC = () => {
   const baseValue = new Value(1);
   const gestureEvent = new Value(State.UNDETERMINED);
+  const passwordRef = useRef<TextInput>(null);
 
   const buttonOpacity = withTimingTransition(baseValue);
   const gestureHanlder = onGestureEvent({ state: gestureEvent });
@@ -39,6 +42,24 @@ const Login: React.FC = () => {
   const bgTranslateY = interpolate(buttonOpacity, {
     inputRange: [0, 1],
     outputRange: [-height / 3, 0],
+    extrapolate: Extrapolate.CLAMP,
+  });
+
+  const formIndex = interpolate(buttonOpacity, {
+    inputRange: [0, 1],
+    outputRange: [1, -1],
+    extrapolate: Extrapolate.CLAMP,
+  });
+
+  const formOpacity = interpolate(buttonOpacity, {
+    inputRange: [0, 1],
+    outputRange: [1, 0],
+    extrapolate: Extrapolate.CLAMP,
+  });
+
+  const formY = interpolate(buttonOpacity, {
+    inputRange: [0, 1],
+    outputRange: [0, 100],
     extrapolate: Extrapolate.CLAMP,
   });
 
@@ -76,6 +97,35 @@ const Login: React.FC = () => {
           <ButtonText color="#fff">SIGN IN WITH FACEBOOK</ButtonText>
         </SignInButton>
       </ButtonArea>
+
+      <Form
+        style={{
+          zIndex: formIndex,
+          opacity: formOpacity,
+          transform: [{ translateY: formY }],
+        }}
+      >
+        <TextField
+          keyboardType="email-address"
+          placeholder="E-MAIL"
+          placeholderTextColor="#999"
+          returnKeyType="next"
+          onSubmitEditing={() => passwordRef.current?.focus()}
+          blurOnSubmit={false}
+        />
+
+        <TextField
+          secureTextEntry
+          placeholder="PASSWORD"
+          placeholderTextColor="#999"
+          returnKeyType="send"
+          ref={passwordRef}
+        />
+
+        <SignInButton>
+          <ButtonText>SIGN IN</ButtonText>
+        </SignInButton>
+      </Form>
     </Container>
   );
 };

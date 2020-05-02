@@ -1,4 +1,4 @@
-import { Dimensions } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 import styled from 'styled-components/native';
 import Animated from 'react-native-reanimated';
 
@@ -34,7 +34,15 @@ interface ButtonProps {
   color?: string;
 }
 
-export const SignInButton = styled(Animated.View)<ButtonProps>`
+export const SignInButton = styled(Animated.View).attrs({
+  elevation: 2,
+  shadowOpacity: 0.2,
+  shadowColor: '#333',
+  shadowOffset: {
+    width: 2,
+    height: 2,
+  },
+})<ButtonProps>`
   background: ${({ color }) => color || '#fff'};
   height: 70px;
   margin: 5px 20px;
@@ -47,4 +55,22 @@ export const ButtonText = styled.Text<ButtonProps>`
   font-size: 20px;
   font-weight: bold;
   color: ${({ color }) => color || '#333'};
+`;
+
+export const Form = styled(Animated.View)`
+  height: ${height / 3}px;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  justify-content: center;
+`;
+
+export const TextField = styled.TextInput`
+  height: 44px;
+  border-radius: 22px;
+  border-width: ${StyleSheet.hairlineWidth}px;
+  margin: 5px 20px;
+  padding: 0 15px;
+  border-color: rgba(0, 0, 0, 0.2);
 `;
